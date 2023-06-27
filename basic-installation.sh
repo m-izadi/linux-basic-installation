@@ -110,8 +110,7 @@ fi
 
 
 # Basic Tools ( net-tools / vim / htop /curl /  )
-	echo ""
-	echo "Would you like to install Basic Tools? (Default No) (Y/n) "
+	echo -e "\nWould you like to install Basic Tools? (Default No) (Y/n) "
 	read -r basic_tools
 	basic_tools="${basic_tools^^}" #toUpperCase
 	if [ -z "$basic_tools" ]; then
@@ -119,8 +118,7 @@ fi
 	fi
 
 # ZSH
-	echo ""
-	echo "Would you like to install oh-my-zsh? (Default No) (Y/n) "
+	echo -e "\nWould you like to install oh-my-zsh? (Default No) (Y/n) "
 	read -r zsh
 	zsh="${zsh^^}" #toUpperCase
 	if [ -z "$zsh" ]; then
@@ -128,8 +126,7 @@ fi
 	fi
 
 # vlc
-	echo ""
-	echo "Would you like to install vlc? (Default No) (Y/n) "
+	echo -e "\nWould you like to install vlc? (Default No) (Y/n) "
 	read -r vlc
 	vlc="${vlc^^}" #toUpperCase
 	if [ -z "$vlc" ]; then
@@ -139,8 +136,7 @@ fi
 	fi
 
 # tmux
-	echo ""
-	echo "Would you like to install tmux? (Default No) (Y/n) "
+	echo -e "\nWould you like to install tmux? (Default No) (Y/n) "
 	read -r tmux
 	tmux="${tmux^^}" #toUpperCase
 	if [ -z "$tmux" ]; then
@@ -150,8 +146,7 @@ fi
 	fi
 
 # openvpn
-	echo ""
-	echo "Would you like to install openvpn? (Default No) (Y/n) "
+	echo -e "\nWould you like to install openvpn? (Default No) (Y/n) "
 	read -r openvpn
 	openvpn="${openvpn^^}" #toUpperCase
 	if [ -z "$openvpn" ]; then
@@ -159,8 +154,7 @@ fi
 	fi
 
 # keepass
-	echo ""
-	echo "Would you like to install keepass? (Default No) (Y/n) "
+	echo -e "\nWould you like to install keepass? (Default No) (Y/n) "
 	read -r keepass
 	keepass="${keepass^^}" #toUpperCase
 	if [ -z "$keepass" ]; then
@@ -170,8 +164,7 @@ fi
 	fi
 
 # ranger
-	echo ""
-	echo "Would you like to install ranger? (Default No) (Y/n) "
+	echo -e "\nWould you like to install ranger? (Default No) (Y/n) "
 	read -r ranger
 	ranger="${ranger^^}" #toUpperCase
 	if [ -z "$ranger" ]; then
@@ -179,8 +172,7 @@ fi
 	fi
 
 # Docker
-	echo ""
-	echo "Would you like to install docker ? (Default No) (Y/n) "
+	echo -e "\nWould you like to install docker ? (Default No) (Y/n) "
 	read -r docker
 	docker="${docker^^}" #toUpperCase
 	if [ -z "$docker" ]; then
@@ -188,8 +180,7 @@ fi
 	fi
 
 # git
-	echo ""
-	echo "Would you like to install git? (Default No) (Y/n) "
+	echo -e "\nWould you like to install git? (Default No) (Y/n) "
 	read -r git
 	git="${git^^}" #toUpperCase
 	if [ -z "$git" ] ; then
@@ -206,8 +197,7 @@ fi
 	fi
 
 # tomcat
-	echo ""
-	echo "Would you like to install tomcat? (Default No)(Y/n) "
+	echo -e "\nWould you like to install tomcat? (Default No)(Y/n) "
 	read -r tomcat
 	tomcat="${tomcat^^}" #toUpperCase
 	if [ -z "$tomcat" ]; then
@@ -215,8 +205,7 @@ fi
 	fi
 
 # nginx
-	echo ""
-	echo "Would you like to install nginx? (Default No) (Y/n) "
+	echo -e "\nWould you like to install nginx? (Default No) (Y/n) "
 	read -r nginx
 	nginx="${nginx^^}" #toUpperCase
 	if [ -z "$nginx" ]; then
@@ -224,8 +213,7 @@ fi
 	fi
 
 # Mattermost
-	echo ""
-	echo "Would you like to install Mattermost? (Default No) (Y/n) "
+	echo -e "\nWould you like to install Mattermost? (Default No) (Y/n) "
 	read -r Mattermost
 	Mattermost="${Mattermost^^}" #toUpperCase
 	if [ -z "$Mattermost" ]; then
@@ -233,8 +221,7 @@ fi
 	fi
 
 # slack
-	echo ""
-	echo "Would you like to install slack? (Default No) (Y/n) "
+	echo -e "\nWould you like to install slack? (Default No) (Y/n) "
 	read -r slack
 	slack="${slack^^}" #toUpperCase
 	if [ -z "$slack" ]; then
@@ -242,8 +229,7 @@ fi
 	fi
 
 # telegram_desktop
-	echo ""
-	echo "Would you like to install telegram_desktop? (Default No) (Y/n) "
+	echo -e "\nWould you like to install telegram_desktop? (Default No) (Y/n) "
 	read -r telegram_desktop
 	telegram_desktop="${telegram_desktop^^}" #toUpperCase
 	if [ -z "$telegram_desktop" ]; then
@@ -251,8 +237,7 @@ fi
 	fi
 
 # sublimetext
-	echo ""
-	echo "Would you like to install sublimetext? (Default No) (Y/n) "
+	echo -e "\nWould you like to install sublimetext? (Default No) (Y/n) "
 	read -r sublimetext
 	sublimetext="${sublimetext^^}" #toUpperCase
 	if [ -z "$sublimetext" ]; then
@@ -260,8 +245,7 @@ fi
 	fi
 
 # vscode
-	echo ""
-	echo "Would you like to install vscode? (Default No) (Y/n) "
+	echo -e "\nWould you like to install vscode? (Default No) (Y/n) "
 	read -r vscode
 	vscode="${vscode^^}" #toUpperCase
 	if [ -z "$vscode" ] ; then

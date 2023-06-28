@@ -1,6 +1,13 @@
 #!/bin/bash
-# zsh vlc tmux OpenVpn Keepass Ranger Docker Git Tomcat  Nginx mattermost  TelegramDesktop SublimeText Slack VScode htop
-RED="\e[31m" ; GRN="\e[32m" ; YLW="\e[33m" ; END="\e[0m"
+#title:         basic-installation_V1.1.sh
+#description:   Automatic installation of packages
+#author:        MohammadReza Izadi
+#created:       August 19 2022
+#updated:       june 28 2023
+#version:       1.0
+#usage:         ./basic-installation_V1.1.sh
+#==============================================================================
+RED="\e[31m" ; GRN="\e[32m" ; YLW="\e[33m" ; NC="\e[0m"
 user=$USER
 if (( EUID == 0 )); then
 	echo -e "\U1F534 ${RED}You must NOT be root to run this. ${NC}" 1>&2
@@ -20,21 +27,112 @@ tput bold
 echo Welcome to ‌Basic Installation
 tput sgr0
 tput cup $( tput lines ) 0
-
+sleep 2
 #####################################
+
+
+#### Menu options
+#‌ Tools
+options[0]="net-tools"
+options[1]="vim"
+options[2]="htop"
+options[3]="curl"
+options[4]="traceroute"
+options[5]="pip"
+options[6]="bash-completion"
+options[7]="tmux"
+options[8]="zsh"
+options[9]="Ranger"
+options[10]="Keepass"
+# Service
+options[11]="Docker"
+options[12]="Git"
+options[13]="OpenVpn"
+options[14]="Nginx"
+options[15]="Tomcat"
+# Massenger
+options[16]="TelegramDesktop"
+options[17]="mattermost"
+options[18]="Slack"
+# IDE
+options[19]="SublimeText"
+options[20]="vscode"
+# Player
+options[21]="vlc"
+
+#Actions to take based on selection
+function ACTIONS {
+# Tools
+    if [[ ${choices[0]} ]]; then net_tools=net-tools && echo -e "${GRN}$net_tools selected${NC}" ; fi
+    if [[ ${choices[1]} ]]; then vim=vim && echo -e "${GRN}$vim selected${NC}" ; fi
+    if [[ ${choices[2]} ]]; then htop=htop && echo -e "${GRN}$htop selected${NC}" ; fi
+    if [[ ${choices[3]} ]]; then curl=curl && echo -e "${GRN}$curl selected${NC}" ; fi
+    if [[ ${choices[4]} ]]; then traceroute=traceroute && echo -e "${GRN}$traceroute selected${NC}" ; fi
+    if [[ ${choices[5]} ]]; then pip=pip && echo -e ${GRN}"$pip selected${NC}" ; fi
+    if [[ ${choices[6]} ]]; then bash_completion=bash-completion && echo -e "${GRN}$bash_completion selected${NC}" ; fi
+    if [[ ${choices[7]} ]]; then tmux=tmux && echo -e "${GRN}$tmux selected${NC}" ; fi
+    if [[ ${choices[8]} ]]; then zsh=zsh && echo -e "${GRN}$zsh selected${NC}" ; fi
+    if [[ ${choices[9]} ]]; then Ranger=ranger-fm && echo -e "${GRN}$Ranger selected${NC}" ; fi
+    if [[ ${choices[10]} ]]; then Keepass=keepass2 && echo -e "${GRN}$Keepass selected${NC}" ; fi
+# Service
+    if [[ ${choices[11]} ]]; then Docker=Docker && echo -e "${GRN}$Docker selected${NC}" ; fi
+    if [[ ${choices[12]} ]]; then Git=Git && echo -e "${GRN}$Git selected${NC}" ; fi
+    if [[ ${choices[13]} ]]; then OpenVpn=OpenVpn && echo -e "${GRN}$OpenVpn selected${NC}" ; fi
+    if [[ ${choices[14]} ]]; then Nginx=Nginx && echo -e "${GRN}$Nginx selected${NC}" ; fi
+    if [[ ${choices[15]} ]]; then Tomcat=Tomcat && echo -e "${GRN}$Tomcat selected${NC}" ; fi
+# Massenger
+    if [[ ${choices[16]} ]]; then TelegramDesktop=TelegramDesktop && echo -e "${GRN}$TelegramDesktop selected${NC}" ; fi
+    if [[ ${choices[17]} ]]; then mattermost=mattermost && echo -e "${GRN}$mattermost selected${NC}" ; fi
+    if [[ ${choices[18]} ]]; then Slack=Slack && echo -e "${GRN}$Slack selected${NC}" ; fi
+# IDE
+    if [[ ${choices[19]} ]]; then SublimeText=SublimeText && echo "${GRN}$SublimeText selected${NC}" ; fi
+    if [[ ${choices[20]} ]]; then vscode=vscode && echo -e "${GRN}$vscode selected${NC}" ; fi
+# Player
+    if [[ ${choices[21]} ]]; then vlc=vlc && echo -e "${GRN}$vlc selected${NC}" ; fi
+}
+
+#Variables
+ERROR=" "
+#Clear screen for menu
+clear
+
+#Menu function
+function MENU {
+    echo "Menu Options"
+    for PKG in "${!options[@]}"; do
+        echo "[""${choices[PKG]:- }""]" $(( PKG+1 ))") ${options[PKG]} "
+    done
+    echo "$ERROR"
+}
+
+#Menu loop
+while MENU && read -e -rp "Select the desired options using their number (again to uncheck, ENTER when done): " -n2 SELECTION && [[ -n "$SELECTION" ]]; do
+    clear
+    if [[ "$SELECTION" == *[[:digit:]]* && $SELECTION -ge 1 && $SELECTION -le ${#options[@]} ]]; then
+        (( SELECTION-- ))   # We subtract 1 to equal options
+        if [[ "${choices[SELECTION]}" == "+" ]]; then
+            choices[SELECTION]=""
+        else
+            choices[SELECTION]="+"
+        fi
+            ERROR=" "
+    else
+        ERROR="Invalid option: $SELECTION"
+    fi
+done
+
+ACTIONS
 # prevent root from creating ~/tmp/ by creating it ourself and cause permission problems
 # Make .node because in the later versions of npm, it's too stupid to make a folder anymore
-mkdir ~/tmp/ ~/.node/
+mkdir ~/tmp/ ~/.node/ >/dev/null 2>&1
 
-######## Proxy
-read -t 15 -pr "Would you like Set Proxy? (Default No) (Y/n) " proxy && proxy="${proxy^^}" #toUpperCase
+#######################
+######## Proxy ########
+#######################
+read -t 15 -rp "Would you like Set Proxy? (Default No) (Y/n) " proxy && proxy="${proxy^^}"
 if [ "$proxy" == "Y" ] ; then
 	read -rp "Do you like to delete proxy after completing the installation process? (Default No) (Y/n)" rm_proxy && rm_proxy="${rm_proxy^^}"
 	read -rp "Please enter your Proxy: " proxy_address
-
-fi
-
-if [ "$proxy" == "Y" ];then
     echo -e "\n\n${GRN}##########################################  Set Proxy  #######################################${NC}"
 
 # APT
@@ -53,94 +151,8 @@ if [ "$proxy" == "Y" ];then
     fi
 fi
 
-# Basic Tools ( net-tools / vim / htop /curl /  )
-read -t 15 -rp "Would you like to install Basic Tools? (Default No) (Y/n) " basic_tools && basic_tools="${basic_tools^^}"
-	# if [ -z "$basic_tools" ]; then
-	# 	basic_tools="N"
-	# fi
-
-# ZSH
-read -t 15 -rp "Would you like to install oh-my-zsh? (Default No) (Y/n) " zsh && zsh="${zsh^^}"
-	# if [ -z "$zsh" ]; then
-	# 	zsh="N"
-	# fi
-
-# vlc
-read -t 15 -rp "Would you like to install vlc? (Default No) (Y/n) " vlc && { vlc="${vlc^^}" && [ "$vlc" == "Y" ] ;} && vlc=vlc 
-# read -t 15 -rp "\nWould you like to install vlc? (Default No) (Y/n) " vlc && vlc="${vlc^^}"
-	# if [ -z "$vlc" ]; then
-	# 	vlc="N"
-	# else
-	# 	vlc=vlc
-	# fi
-
-# tmux
-read -t 15 -rp "Would you like to install tmux? (Default No) (Y/n) " tmux && { tmux="${tmux^^}" && [ "$tmux" == "Y" ] ;} && tmux=tmux 
-	# if [ -z "$tmux" ]; then
-	# 	tmux="N"
-	# else
-	# 	tmux=tmux
-	# fi
-# keepass
-
-read -t 15 -rp "Would you like to install keepass? (Default No) (Y/n) "keepass && { keepass="${keepass^^}" && [ "$keepass" == "Y" ] ;} && keepass=keepass 
-	# if [ -z "$keepass" ]; then
-	# 	keepass="N"
-	# else
-	# 	keepass=keepass
-	# fi
-
-# openvpn
-read -t 15 -rp "Would you like to install openvpn? (Default No) (Y/n) " openvpn &&	openvpn="${openvpn^^}"
-	# if [ -z "$openvpn" ]; then
-	# 	openvpn="N"
-	# fi
-
-
-
-# ranger
-read -t 15 -rp "Would you like to install ranger? (Default No) (Y/n) " ranger && ranger="${ranger^^}"
-	# if [ -z "$ranger" ]; then
-	# 	ranger="N"
-	# fi
-
-# Docker
-read -t 15 -rp "Would you like to install docker ? (Default No) (Y/n) " docker && docker="${docker^^}"
-	# if [ -z "$docker" ]; then
-	# 	docker="N"
-	# fi
-
-# git
-read -t 15 -rp "Would you like to install git? (Default No) (Y/n) " git && git="${git^^}"
-	if [ "$git" == "Y" ] ; then
-		read -t 10 -rp "${YLW} Please enter your name (for git): ${NC}" git_name
-		read -t 10 -rp "${YLW} Please enter your email (for git): ${NC}" git_email 
-	fi
-
-# tomcat
-	read -t 15 -rp "Would you like to install tomcat? (Default No)(Y/n) " tomcat && tomcat="${tomcat^^}"
-# nginx
-	read -t 15 -rp "Would you like to install nginx? (Default No) (Y/n) " nginx &&	nginx="${nginx^^}"
-	if [ -z "$nginx" ]; then
-		nginx="N"
-	fi
-
-# mattermost
-	read -t 15 -rp "Would you like to install mattermost? (Default No) (Y/n) " mattermost && mattermost="${mattermost^^}"
-
-# slack
-	read -t 15 -rp "Would you like to install slack? (Default No) (Y/n) " slack &&	slack="${slack^^}"
-
-# telegram_desktop
-	read -t 15 -rp "Would you like to install telegram_desktop? (Default No) (Y/n) " telegram_desktop && telegram_desktop="${telegram_desktop^^}"
-
-# sublimetext
-	read -t 15 -rp "Would you like to install sublimetext? (Default No) (Y/n) " sublimetext &&  sublimetext="${sublimetext^^}"
-# vscode
-	read -t 15 -rp "Would you like to install vscode? (Default No) (Y/n) " vscode && vscode="${vscode^^}"
-
-echo -e "${GRN}#####################${NC} Tasks Started in : ${YLW}$(date "+%Y/%m/%d %H:%M") ${GRN}########################${NC}"
-echo -e "\n\n${GRN}##############################################################################################"
+echo -e "\n${GRN}							Tasks Started in : ${YLW}$(date "+%Y/%m/%d %H:%M") ${NC}"
+echo -e "${GRN}##############################################################################################"
 echo -e "${GRN}######################################  Start Installation  ##################################"
 echo -e "${GRN}##############################################################################################"
 	sudo apt update
@@ -151,24 +163,15 @@ echo -e "\U231B ${GRN}######################################     basic tools    
 	    sudo apt install net-tools vim htop curl traceroute pip bash-completion -y
 	fi
 
-echo -e "\U231B ${GRN}######################################     Apt Install      ##################################${NC}"
+echo -e "\U231B ${GRN}######################################     $net_tools $vim $htop $curl $traceroute $pip $bash_completion $tmux $vlc $keepass   ##################################${NC}"
 
-if [[ $vlc == "vlc" || $tmux == "tmux" || $keepass == "keepass" ]];then
-	{ sudo apt install $vlc $tmux $keepass -y && echo -e "$vlc $tmux $keepass was Installed " ;} || \
-	echo -e "\U1F534 $RED----> $vlc $tmux $keepass installation steps are not done correctly.${NC}"; exit 1
+if [[ -n $net_tools || -n $vim || -n $htop || -n $curl || -n $traceroute || -n $pip || -n $bash_completion || -n $tmux || -n $vlc || -n $keepass ]];then
+	{ sudo apt install $net_tools $vim $htop $curl $traceroute $pip $bash_completion $tmux $vlc $keepass -y && echo -e "$net_tools $vim $htop $curl $traceroute $pip $bash_completion $tmux $vlc $keepass was Installed " ;} || \
+	echo -e "\U1F534 $RED----> $net_tools $vim $htop $curl $traceroute $pip $bash_completion $tmux $vlc $keepass installation steps are not done correctly.${NC}" && exit 1
 else
 		echo -e "\U1F4CC ${YLW}This step was skipped${NC}"
 fi
 
-# echo -e "${GRN}######################################         vlc          ##################################${NC}"
-# 	if [ "$vlc" == "Y" ];then
-# 	    sudo apt install vlc -y
-# 	fi
-
-# echo -e "${GRN}######################################         tmux         ##################################${NC}"
-# 	if [ "$tmux" == "Y" ];then
-# 	    sudo apt install tmux -y
-# 	fi
 # echo -e "${GRN}######################################       KeePass        ##################################${NC}"
 # 	if [ "$keepass" == "Y" ];then
 # 	    # sudo apt-add-repository ppa:jtaylor/keepass
@@ -176,8 +179,8 @@ fi
 # 	    sudo apt-get install keepass2 -y
 # 	fi
 echo -e "\U231B ${GRN}######################################       openvpn        ##################################${NC}"
-	if [ "$openvpn" == "Y" ];then
-	    # https://www.cyberciti.biz/faq/howto-setup-openvpn-server-on-ubuntu-linux-14-04-or-16-04-lts/
+# https://www.cyberciti.biz/faq/howto-setup-openvpn-server-on-ubuntu-linux-14-04-or-16-04-lts/
+	if [ -n "$openvpn" ];then
 	    wget https://git.io/vpn -O openvpn-install.sh
 	    sudo chmod +x openvpn-install.sh
 	    sudo bash openvpn-install.sh
@@ -186,13 +189,13 @@ echo -e "\U231B ${GRN}######################################       openvpn      
 	fi
 
 echo -e "\U231B ${GRN}######################################        ranger        ##################################${NC}"
-	if [ "$ranger" == "Y" ];then
+	if [ -n "$ranger" ];then
 	    sudo pip install ranger-fm
 	else
 		echo -e "\U1F4CC ${YLW}This step was skipped${NC}"
 	fi
 echo -e "\U231B ${GRN}######################################        Docker        ##################################${NC}"
-	if [ "$docker" == "Y" ]; then
+	if [ -n "$docker" ]; then
 		sudo apt-get update
 		sudo apt-get install -y \
 		   ca-certificates \
@@ -215,7 +218,7 @@ echo -e "\U231B ${GRN}######################################        Docker      
 	#     curl -Sslf "$curl_url_proxy" https://get.docker.com/ | sudo bash
 	# fi
 echo -e "\U231B ${GRN}######################################         Git          ##################################${NC}"
-	if [ "$git" == "Y" ];then
+	if [ -n "$git" ];then
 	    sudo apt install git -y
 	    sudo git config --global user.name "$git_name"
 	    sudo git config --global user.email "$git_email"
@@ -224,7 +227,7 @@ echo -e "\U231B ${GRN}######################################         Git        
 	fi
 
 echo -e "\U231B ${GRN}######################################         zsh          ##################################${NC}"
-    if [ "$zsh" == "Y" ];then
+    if [ -n "$zsh" ];then
             sudo apt install zsh -y
             sh -c "$(curl -fsSL "$curl_url_proxy" https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh )"
             # default shell
@@ -237,19 +240,19 @@ echo -e "\U231B ${GRN}######################################         zsh        
 		echo -e "\U1F4CC ${YLW}This step was skipped${NC}"
     fi
 echo -e "\U231B ${GRN}######################################        tomcat        ##################################${NC}"
-	if [ "$tomcat" == "Y" ]; then
+	if [ -n "$tomcat" ]; then
 		sudo apt-get install -y tomcat7 tomcat7-admin tomcat7-common tomcat7-docs tomcat7-examples tomcat7-user
 	else
 		echo -e "\U1F4CC ${YLW}This step was skipped${NC}"
 	fi
 echo -e "\U231B ${GRN}######################################        nginx         ##################################${NC}"
-	if [ "$nginx" == "Y" ]; then
+	if [ -n "$nginx" ]; then
 		sudo apt-get install -y nginx
 	else
 		echo -e "\U1F4CC ${YLW}This step was skipped${NC}"
 	fi
 echo -e "\U231B ${GRN}######################################      mattermost      ##################################${NC}"
-	if [ "$mattermost" == "Y" ];then
+	if [ -n "$mattermost" ];then
 	    curl -o- "$curl_url_proxy" https://deb.packages.mattermost.com/setup-repo.sh | sudo bash
 	    sudo apt install mattermost-desktop -y
 	    sudo apt upgrade mattermost-desktop -y
@@ -257,19 +260,19 @@ echo -e "\U231B ${GRN}######################################      mattermost    
 		echo -e "\U1F4CC ${YLW}This step was skipped${NC}"
 	fi
 echo -e "\U231B ${GRN}######################################        slack         ##################################${NC}"
-	if [ "$slack" == "Y" ];then
+	if [ -n "$slack" ];then
 	    sudo snap install slack --classic
 	else
 		echo -e "\U1F4CC ${YLW}This step was skipped${NC}"
 	fi
 echo -e "\U231B ${GRN}######################################   Telegram Desktop   ##################################${NC}"
-	if [ "$telegram_desktop" == "Y" ];then
+	if [ -n "$telegram_desktop" ];then
 	    sudo snap install telegram-desktop
 	else
 		echo -e "\U1F4CC ${YLW}This step was skipped${NC}"
 	fi
 echo -e "\U231B ${GRN}######################################     sublimetext      ##################################${NC}"
-	if [ "$sublimetext" == "Y" ]; then
+	if [ -n "$sublimetext" ]; then
 	    #sudo wget -O- https://download.sublimetext.com/sublimehq-pub.gpg | gpg --dearmor | sudo tee /usr/share/keyrings/sublimehq.gpg
 	    #echo 'deb [signed-by=/usr/share/keyrings/sublimehq.gpg] https://download.sublimetext.com/ apt/stable/' | sudo tee /etc/apt/sources.list.d/sublime-text.list
 	    #sudo apt install sublime-text -y
@@ -278,7 +281,7 @@ echo -e "\U231B ${GRN}######################################     sublimetext    
 		echo -e "\U1F4CC ${YLW}This step was skipped${NC}"
 	fi
 echo -e "\U231B ${GRN}######################################        vscode        ##################################${NC}"
-	if [ "$vscode" == "Y" ]; then
+	if [ -n "$vscode" ]; then
 		sudo apt install software-properties-common apt-transport-https wget -y
 		wget -q https://packages.microsoft.com/keys/microsoft.asc -O- | sudo apt-key add -
 		sudo add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
@@ -289,9 +292,10 @@ echo -e "\U231B ${GRN}######################################        vscode      
 		echo -e "\U1F4CC ${YLW}This step was skipped${NC}"
 	fi
 ######################################################################################################################
+## SSH
 # ssh-keygen -t rsa -b 2048 -C "$email" -N "" -f ~/.ssh/id_rsa
 echo -e "\U2705 ${GRN}----> Installation is complete .${NC}\n"
-if [ "$docker" == "Y" ]; then
+if [ -n "$docker" ]; then
 	echo -e "${YLW}Please log out and log back in to finish Docker configuration.${NC}"
 fi
 
@@ -300,3 +304,11 @@ fi
 if [ "$rm_proxy" == "Y" ] ; then
     rm -rf /etc/apt/apt.conf.d/proxy.conf
 fi
+
+# The following will be added in the near future## Goal
+# Install Chromiume
+# xdotools
+
+# add Local Repo
+
+# exit problem in apt 
